@@ -4,14 +4,13 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.joe.lastfmchallenge.R
 import com.example.joe.lastfmchallenge.data.models.tracks.Track
+import kotlinx.android.synthetic.main.view_holder_track.view.*
 
-class TrackAdapter(private val trackList:MutableList<Track>, private val trackListener: TrackClickListener): RecyclerView.Adapter<TrackAdapter.ViewHolder>() {
+class TrackAdapter(private val trackList:MutableList<Track>, private val onTrackClick:(Track)->Unit): RecyclerView.Adapter<TrackAdapter.ViewHolder>() {
     lateinit var context: Context
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
@@ -23,14 +22,7 @@ class TrackAdapter(private val trackList:MutableList<Track>, private val trackLi
     override fun getItemCount(): Int = trackList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val temp = trackList[position]
-        holder.name.text = temp.name
-        holder.listeners.text = temp.listeners
-        holder.artistName.text = temp.streamable
-        Glide.with(context).load(temp.image[1].text).into(holder.image)
-        holder.itemView.setOnClickListener {
-            trackListener.onClick(temp)
-        }
+        holder.bind(trackList[position], context, onTrackClick)
     }
 
     fun refreshData(tracks:List<Track>){
@@ -40,14 +32,16 @@ class TrackAdapter(private val trackList:MutableList<Track>, private val trackLi
     }
 
     class ViewHolder(trackView: View):RecyclerView.ViewHolder(trackView) {
-        val name : TextView = trackView.findViewById(R.id.tvTrackName)
-        val listeners: TextView = trackView.findViewById(R.id.tvListeners)
-        val artistName: TextView = trackView.findViewById(R.id.tvArtistName)
-        val image: ImageView = trackView.findViewById(R.id.imageViewTrack)
+        fun bind(temp: Track, context: Context, onTrackClick: (Track) -> Unit) {
+            itemView.tvTrackName.text = temp.name
+            itemView.tvListeners.text = temp.listeners
+            itemView.tvArtistName.text = temp.streamable
+            Glide.with(context).load(temp.image[1].text).into(itemView.imageViewTrack)
+            itemView.setOnClickListener {
+                onTrackClick.invoke(temp)
+            }
+        }
     }
 
-    interface TrackClickListener {
-        fun onClick(track: Track)
-    }
 }
 

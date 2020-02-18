@@ -13,7 +13,6 @@ import com.example.joe.lastfmchallenge.common.ALBUM
 import com.example.joe.lastfmchallenge.common.ApiProgress
 import com.example.joe.lastfmchallenge.common.AppInjector
 import com.example.joe.lastfmchallenge.common.TYPE
-import com.example.joe.lastfmchallenge.data.models.album.Album
 import com.example.joe.lastfmchallenge.di.factories.AlbumViewModelFactory
 import com.example.joe.lastfmchallenge.di.fragment.FragmentComponent
 import com.example.joe.lastfmchallenge.di.fragment.FragmentModule

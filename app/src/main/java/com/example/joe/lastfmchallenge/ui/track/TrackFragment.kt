@@ -14,7 +14,6 @@ import com.example.joe.lastfmchallenge.R
 import com.example.joe.lastfmchallenge.adapter.TrackAdapter
 import com.example.joe.lastfmchallenge.common.ApiProgress
 import com.example.joe.lastfmchallenge.common.AppInjector
-import com.example.joe.lastfmchallenge.data.models.tracks.Track
 import com.example.joe.lastfmchallenge.di.factories.TrackViewModelFactory
 import com.example.joe.lastfmchallenge.di.fragment.FragmentComponent
 import com.example.joe.lastfmchallenge.di.fragment.FragmentModule
@@ -47,7 +46,9 @@ class TrackFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
         injectDependencies()
         linearLayoutManager = LinearLayoutManager(context)
-        trackAdapter = TrackAdapter(mutableListOf(), trackListener)
+        trackAdapter = TrackAdapter(mutableListOf()) { track ->
+            Toast.makeText(context, track.listeners, Toast.LENGTH_SHORT).show()
+        }
         rvTrack.adapter = trackAdapter
         rvTrack.layoutManager = linearLayoutManager
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(TrackViewModel::class.java)
@@ -84,12 +85,6 @@ class TrackFragment : Fragment(){
 
         imageButtonTrack.setOnClickListener{
             viewModel.getTrack(trackSearch.text.toString())
-        }
-    }
-
-    private val trackListener :TrackAdapter.TrackClickListener = object : TrackAdapter.TrackClickListener{
-        override fun onClick(track: Track) {
-            Toast.makeText(context, track.listeners, Toast.LENGTH_SHORT).show()
         }
     }
 

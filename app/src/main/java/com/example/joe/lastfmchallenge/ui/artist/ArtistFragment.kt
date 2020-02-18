@@ -14,7 +14,6 @@ import com.example.joe.lastfmchallenge.R
 import com.example.joe.lastfmchallenge.adapter.ArtistAdapter
 import com.example.joe.lastfmchallenge.common.ApiProgress
 import com.example.joe.lastfmchallenge.common.AppInjector
-import com.example.joe.lastfmchallenge.data.models.artists.Artist
 import com.example.joe.lastfmchallenge.di.factories.ArtistViewModelFatory
 import com.example.joe.lastfmchallenge.di.fragment.FragmentComponent
 import com.example.joe.lastfmchallenge.di.fragment.FragmentModule
@@ -41,7 +40,9 @@ class ArtistFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         injectDependencies()
         linearLayoutManager = LinearLayoutManager(context)
-        artistAdapter = ArtistAdapter(mutableListOf(), artistListener)
+        artistAdapter = ArtistAdapter(mutableListOf()) { artist->
+            Toast.makeText(context, artist.listeners, Toast.LENGTH_SHORT).show()
+        }
         artistRecycler.adapter = artistAdapter
         artistRecycler.layoutManager = linearLayoutManager
         artistViewModel = ViewModelProviders.of(this, viewModelFactory).get(ArtistViewModel::class.java)
@@ -81,11 +82,6 @@ class ArtistFragment : Fragment() {
         }
     }
 
-    private val artistListener : ArtistAdapter.ArtistClickListener = object : ArtistAdapter.ArtistClickListener{
-        override fun onclick(artist: Artist) {
-            Toast.makeText(context, artist.listeners, Toast.LENGTH_SHORT).show()
-        }
-    }
 
     private fun refreshContent(){
         tvMessageArtist.visibility = View.GONE

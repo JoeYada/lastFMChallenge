@@ -4,14 +4,15 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.joe.lastfmchallenge.R
 import com.example.joe.lastfmchallenge.data.models.artists.Artist
+import kotlinx.android.synthetic.main.view_holder_artist.view.*
+import kotlinx.android.synthetic.main.view_holder_track.view.tvArtistName
+import kotlinx.android.synthetic.main.view_holder_track.view.tvListeners
 
-class ArtistAdapter(private val artistList: MutableList<Artist>, private val artistClickListener: ArtistClickListener):RecyclerView.Adapter<ArtistAdapter.ViewHolder>() {
+class ArtistAdapter(private val artistList: MutableList<Artist>, private val onArtistClick:(Artist)->Unit):RecyclerView.Adapter<ArtistAdapter.ViewHolder>() {
     lateinit var context: Context
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         context = viewGroup.context
@@ -23,14 +24,7 @@ class ArtistAdapter(private val artistList: MutableList<Artist>, private val art
     override fun getItemCount(): Int = artistList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val temp = artistList[position]
-        holder.name.text = temp.name
-        holder.listeners.text = temp.listeners
-        holder.streamable.text = temp.streamable
-        Glide.with(context).load(temp.image[1].text).into(holder.image)
-        holder.itemView.setOnClickListener {
-            artistClickListener.onclick(temp)
-        }
+        holder.bind(artistList[position], context, onArtistClick)
     }
 
     fun refreshData(artists:List<Artist>){
@@ -40,13 +34,15 @@ class ArtistAdapter(private val artistList: MutableList<Artist>, private val art
     }
 
     class ViewHolder(artistView: View):RecyclerView.ViewHolder(artistView) {
-        val name :TextView = artistView.findViewById(R.id.tvArtistName)
-        val listeners: TextView = artistView.findViewById(R.id.tvListeners)
-        val streamable: TextView = artistView.findViewById(R.id.tvStreamable)
-        val image: ImageView = artistView.findViewById(R.id.imageViewArtist)
+        fun bind(artist: Artist, context: Context, onArtistClick: (Artist) -> Unit) {
+            itemView.tvArtistName.text = artist.name
+            itemView.tvListeners.text = artist.listeners
+            itemView.tvStreamable.text = artist.streamable
+            Glide.with(context).load(artist.image[1].text).into(itemView.imageViewArtist)
+            itemView.setOnClickListener {
+                onArtistClick.invoke(artist)
+            }
+        }
     }
 
-    interface ArtistClickListener{
-        fun onclick(artist: Artist)
-    }
 }
