@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">lastFMChallenge</string>
+    <string name="enter_album">Enter Album</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="streamable">Streamable</string>
+    <string name="artist">Artist</string>
+    <string name="name">Name</string>
+    <string name="search">Search</string>
+    <string name="artist_recycler">Artist Recycler</string>
+    <string name="enter_artist">Enter Artist</string>
+    <string name="artist_name">Artist Name</string>
+    <string name="listeners">listeners</string>
+    <string name="listene">Listeners:</string>
+    <string name="tracks">Tracks:</string>
+    <string name="album_name">Album Name:</string>
+</resources>
